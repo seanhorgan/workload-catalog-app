@@ -1,19 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Workload } from '../data/workloads';
-import { ArrowRight, Copy, MessageSquare, Code2, Microscope, Brain, FileText, Database } from 'lucide-react';
+import { ArrowRight, MessageSquare, Code2, Microscope, Brain, FileText, Database } from 'lucide-react';
 
 interface WorkloadCardProps {
   workload: Workload;
 }
 
 export function WorkloadCard({ workload }: WorkloadCardProps) {
-  const handleCopyLink = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const url = `${window.location.origin}/workloads/${workload.id}`;
-    navigator.clipboard.writeText(url);
-    // Could add a toast here
-  };
+
 
   const getIcon = () => {
     switch (workload.id) {
@@ -40,13 +35,7 @@ export function WorkloadCard({ workload }: WorkloadCardProps) {
         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-950">
           {getIcon()}
         </div>
-        <button
-          onClick={handleCopyLink}
-          className="rounded-md p-2 text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300 transition-colors"
-          title="Copy URL"
-        >
-          <Copy className="h-4 w-4" />
-        </button>
+
       </div>
       
       <div className="flex-1">
