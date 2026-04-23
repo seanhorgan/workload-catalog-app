@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { workloads } from '../data/workloads';
-import { ArrowLeft, Copy, Github, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Github, ExternalLink } from 'lucide-react';
 
 export function WorkloadDetail() {
   const { id } = useParams<{ id: string }>();
@@ -11,9 +11,7 @@ export function WorkloadDetail() {
     return <Navigate to="/" replace />;
   }
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-  };
+
 
   return (
     <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
@@ -35,13 +33,7 @@ export function WorkloadDetail() {
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-3">
-          <button
-            onClick={handleCopyLink}
-            className="inline-flex h-9 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-3 text-sm font-medium text-zinc-300 border border-zinc-800 transition-colors hover:bg-zinc-800 hover:text-white"
-          >
-            <Copy className="h-4 w-4" />
-            <span className="hidden sm:inline">Copy Link</span>
-          </button>
+
           <a
             href={workload.githubUrl}
             target="_blank"
@@ -54,18 +46,39 @@ export function WorkloadDetail() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-10">
-          <section>
-            <h2 className="font-display text-xl font-semibold text-white mb-4">Use Case Narrative</h2>
-            <div className="prose prose-invert max-w-none text-zinc-300">
-              <p className="leading-relaxed">{workload.narrative}</p>
-            </div>
-          </section>
+      <div className="space-y-12">
+        {/* Use Case Narrative */}
+        <section>
+          <h2 className="font-display text-xl font-semibold text-white mb-4">Use Case Narrative</h2>
+          <div className="prose prose-invert max-w-none text-zinc-300">
+            <p className="leading-relaxed">{workload.narrative}</p>
+          </div>
+        </section>
 
+        {/* Configuration Variables */}
+        <section>
+          <h2 className="font-display text-xl font-semibold text-white mb-4">Configuration Variables</h2>
+          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {Object.entries(workload.variables).map(([key, value]) => {
+                const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                return (
+                  <div key={key} className="space-y-1">
+                    <dt className="text-xs font-medium text-zinc-400 uppercase tracking-wider">{label}</dt>
+                    <dd className="text-sm text-zinc-100 font-medium break-words">{value}</dd>
+                  </div>
+                );
+              })}
+            </dl>
+          </div>
+        </section>
+
+        {/* Bottom grid for Models and System Impact */}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          {/* Key Models & Datasets */}
           <section>
             <h2 className="font-display text-xl font-semibold text-white mb-4">Key Models & Datasets</h2>
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden">
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 overflow-hidden h-full">
               <dl className="divide-y divide-zinc-800">
                 <div className="flex flex-col py-3 px-4 sm:flex-row gap-2">
                   <dt className="w-1/3 text-sm font-medium text-zinc-400">Top Models</dt>
@@ -82,30 +95,16 @@ export function WorkloadDetail() {
               </dl>
             </div>
           </section>
-        </div>
 
-        <div>
-          <h2 className="font-display text-xl font-semibold text-white mb-4">Configuration Variables</h2>
-          <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-1">
-            <dl className="divide-y divide-zinc-800/60">
-              {Object.entries(workload.variables).map(([key, value]) => {
-                const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-                return (
-                  <div key={key} className="flex justify-between py-3 px-4 text-sm gap-4">
-                    <dt className="font-medium text-zinc-400 truncate">{label}</dt>
-                    <dd className="text-right text-zinc-100 break-words max-w-[60%]">{value}</dd>
-                  </div>
-                );
-              })}
-            </dl>
-          </div>
-          
-          <div className="mt-8 rounded-xl bg-zinc-900/80 p-5 border border-zinc-800">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-2">System Impact</h3>
-            <p className="text-sm text-zinc-400">
-              This workload relies heavily on <strong className="text-zinc-200 font-medium">{workload.variables.serverOptimizations.toLowerCase()}</strong> to maintain optimal latency and scale efficiently.
-            </p>
-          </div>
+          {/* System Impact */}
+          <section>
+            <h2 className="font-display text-xl font-semibold text-white mb-4">System Impact</h2>
+            <div className="rounded-xl bg-zinc-900/80 p-6 border border-zinc-800">
+              <p className="text-sm text-zinc-400 leading-relaxed">
+                This workload relies heavily on <strong className="text-zinc-200 font-medium">{workload.variables.serverOptimizations.toLowerCase()}</strong> to maintain optimal latency and scale efficiently.
+              </p>
+            </div>
+          </section>
         </div>
       </div>
     </div>
