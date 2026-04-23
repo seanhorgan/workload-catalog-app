@@ -1,0 +1,6 @@
+{
+  "name": "Workload Catalog",
+  "description": "Catalogs real-world AI inference workloads for evaluating optimizations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
