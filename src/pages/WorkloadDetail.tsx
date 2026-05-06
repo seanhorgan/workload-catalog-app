@@ -60,18 +60,40 @@ export function WorkloadDetail() {
           <h2 className="font-display text-xl font-semibold text-white mb-4">Configuration Variables</h2>
           <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6">
             <dl className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {Object.entries(workload.variables).map(([key, value]) => {
-                const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+              {[
+                'systemPrompt',
+                'isl',
+                'islNewPerTurn',
+                'distribution',
+                'multiTurn',
+                'turnsMean',
+                'timeBetweenTurns',
+                'osl',
+                'modelTemperature'
+              ].map((key) => {
+                const value = workload.variables[key as keyof typeof workload.variables];
+                const label = key === 'distribution' ? 'Input Distribution' : key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                
+                // Extract parenthetical suffix if present
+                const match = value.match(/\((.*?)\)/);
+                const suffix = match ? `(${match[1]})` : '';
+                const cleanVal = value.replace(/\s*\(.*?\)/g, '');
+
                 return (
                   <div key={key} className="space-y-1">
-                    <dt className="text-xs font-medium text-zinc-400 uppercase tracking-wider">{label}</dt>
-                    <dd className="text-sm text-zinc-100 font-medium break-words">{value}</dd>
+                    <dt className="text-xs font-medium text-zinc-400 tracking-wider flex items-center gap-1">
+                      <span className="uppercase">{label}</span>
+                      {suffix && <span className="text-zinc-500 lowercase">{suffix}</span>}
+                    </dt>
+                    <dd className="text-sm text-zinc-100 font-medium break-words">{cleanVal}</dd>
                   </div>
                 );
               })}
             </dl>
           </div>
         </section>
+
+
 
         {/* Bottom grid for Models and System Impact */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
@@ -100,9 +122,12 @@ export function WorkloadDetail() {
           <section>
             <h2 className="font-display text-xl font-semibold text-white mb-4">System Impact</h2>
             <div className="rounded-xl bg-zinc-900/80 p-6 border border-zinc-800">
-              <p className="text-sm text-zinc-400 leading-relaxed">
-                This workload relies heavily on <strong className="text-zinc-200 font-medium">{workload.variables.serverOptimizations.toLowerCase()}</strong> to maintain optimal latency and scale efficiently.
+              <p className="text-sm text-zinc-400 leading-relaxed mb-4">
+                This workload relies heavily on the following optimizations to maintain optimal latency and scale efficiently:
               </p>
+              <div className="text-sm text-zinc-100 font-medium break-words">
+                {workload.variables.serverOptimizations}
+              </div>
             </div>
           </section>
         </div>

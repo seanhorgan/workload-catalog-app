@@ -2,6 +2,7 @@ import React from 'react';
 import { workloads } from '../data/workloads';
 import { WorkloadCard } from '../components/WorkloadCard';
 import { Github, Database } from 'lucide-react';
+import { WorkloadSummaryTable } from '../components/WorkloadSummaryTable';
 
 export function Catalog() {
   return (
@@ -9,7 +10,7 @@ export function Catalog() {
       <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-4xl">
           <h1 className="font-display text-4xl font-bold tracking-tight text-zinc-50 mb-4">
-            Real-world Workload Catalog
+            Workload Catalog
           </h1>
           <p className="text-lg text-zinc-400 leading-relaxed">
             This is catalog of benchmarking workloads that represent real-world inference use cases. Extending beyond standard single-turn prompts, it models the distinct system constraints of agentic workflows—where models generate commands, pause for external tool execution, and inject results into subsequent prompts. By simulating these causal dependencies and inter-request wait times, users can evaluate KV cache retention, prefix-aware routing, and memory fragmentation under realistic agent-driven load.
@@ -31,6 +32,8 @@ export function Catalog() {
           <WorkloadCard key={workload.id} workload={workload} />
         ))}
       </div>
+
+      <WorkloadSummaryTable />
     </div>
   );
 }
