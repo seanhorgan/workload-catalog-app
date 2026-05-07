@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { workloads } from '../data/workloads';
 import { WorkloadCard } from '../components/WorkloadCard';
 import { Github, Database } from 'lucide-react';
 import { WorkloadSummaryTable } from '../components/WorkloadSummaryTable';
 
 export function Catalog() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedWorkload = searchParams.get('workload');
+
+  useEffect(() => {
+    if (selectedWorkload) {
+      // Wait a bit for the page to render before scrolling
+      const timer = setTimeout(() => {
+        const element = document.getElementById(selectedWorkload);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [selectedWorkload]);
+
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
@@ -29,7 +46,12 @@ export function Catalog() {
 
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {workloads.map((workload) => (
-          <WorkloadCard key={workload.id} workload={workload} />
+          <WorkloadCard 
+            key={workload.id} 
+            workload={workload} 
+            isSelected={workload.id === selectedWorkload}
+            onSelect={() => setSearchParams({ workload: workload.id })}
+          />
         ))}
       </div>
 

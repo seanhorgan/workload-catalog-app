@@ -5,9 +5,11 @@ import { ArrowRight, MessageSquare, Code2, Microscope, Brain, FileText, Database
 
 interface WorkloadCardProps {
   workload: Workload;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }
 
-export function WorkloadCard({ workload }: WorkloadCardProps) {
+export function WorkloadCard({ workload, isSelected, onSelect }: WorkloadCardProps) {
 
 
   const getIcon = () => {
@@ -30,7 +32,15 @@ export function WorkloadCard({ workload }: WorkloadCardProps) {
   };
 
   return (
-    <div className="group relative flex flex-col items-start gap-4 rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 shadow-sm transition-all hover:bg-zinc-900 hover:border-zinc-700">
+    <div 
+      id={workload.id}
+      onClick={onSelect}
+      className={`group relative flex flex-col items-start gap-4 rounded-xl border p-6 shadow-sm transition-all hover:bg-zinc-900 cursor-pointer ${
+        isSelected 
+          ? 'border-blue-500 bg-zinc-900 shadow-[0_0_15px_rgba(59,130,246,0.5)]' 
+          : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'
+      }`}
+    >
       <div className="flex w-full items-start justify-between">
         <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-zinc-800 bg-zinc-950">
           {getIcon()}
