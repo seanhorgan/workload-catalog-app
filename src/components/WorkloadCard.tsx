@@ -62,6 +62,7 @@ export function WorkloadCard({ workload, isSelected, onSelect }: WorkloadCardPro
           href={workload.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1.5 text-zinc-400 transition-colors hover:text-white"
         >
           <svg
@@ -82,6 +83,7 @@ export function WorkloadCard({ workload, isSelected, onSelect }: WorkloadCardPro
         </a>
         <Link 
           to={`/workloads/${workload.id}`}
+          onClick={(e) => e.stopPropagation()}
           className="flex items-center gap-1 text-zinc-300 transition-colors group-hover:text-white"
         >
           View Details
